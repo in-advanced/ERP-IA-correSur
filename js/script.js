@@ -1,30 +1,28 @@
-// ===== FUNCIONALIDAD DE DESCARGA PDF ULTRA-ROBUSTA =====
+// ===== PDF CONTINUO SIN CORTES DE PÁGINA =====
 function downloadPDF() {
-    console.log('🚀 Iniciando descarga de PDF...');
+    console.log('🚀 Generando PDF continuo...');
     
-    // Mostrar indicador de carga
     const loadingOverlay = document.createElement('div');
     loadingOverlay.className = 'loading-overlay';
     loadingOverlay.innerHTML = `
         <div class="loading-spinner"></div>
-        Generando PDF (versión robusta)...
+        Generando PDF continuo (sin cortes)...
     `;
     document.body.appendChild(loadingOverlay);
 
-    // Verificar que html2pdf esté disponible
+    // Verificar disponibilidad
     if (typeof html2pdf === 'undefined') {
-        console.error('❌ html2pdf no está disponible');
+        console.error('❌ html2pdf no disponible');
         if (document.body.contains(loadingOverlay)) {
             document.body.removeChild(loadingOverlay);
         }
-        showNotification('❌ Error: Librería PDF no cargada. Recargue la página.', 'error');
+        showNotification('❌ Error: Librería PDF no cargada', 'error');
         return;
     }
 
-    // Encontrar el elemento de contenido
     const element = document.getElementById('main-content');
     if (!element) {
-        console.error('❌ Elemento main-content no encontrado');
+        console.error('❌ Contenido no encontrado');
         if (document.body.contains(loadingOverlay)) {
             document.body.removeChild(loadingOverlay);
         }
@@ -32,228 +30,423 @@ function downloadPDF() {
         return;
     }
 
-    console.log('✅ Elemento encontrado:', element);
-    console.log('📄 Contenido a convertir:', element.innerHTML.substring(0, 200) + '...');
+    // Medir el contenido para crear una página única
+    const contentHeight = element.scrollHeight;
+    const contentWidth = element.scrollWidth;
+    
+    console.log(`📏 Dimensiones del contenido: ${contentWidth}x${contentHeight}px`);
 
-    // Configuración ULTRA-SIMPLE que siempre funciona
+    // Configuración para PDF CONTINUO (página única muy larga)
     const opt = {
-        margin: 10,
-        filename: 'CORRESUR_ERP+IA_Propuesta_Ejecutiva.pdf',
+        margin: 5, // Márgenes mínimos
+        filename: 'CORRESUR_ERP+IA_Propuesta_Continua.pdf',
         image: { 
             type: 'jpeg', 
-            quality: 0.8 
+            quality: 0.9 
         },
         html2canvas: { 
-            scale: 1,                    // Escala simple
-            useCORS: false,              // Sin CORS
-            allowTaint: true,            // Permitir contenido "sucio"
-            backgroundColor: '#ffffff',   // Fondo blanco
-            logging: true,               // Activar logs para debugging
-            removeContainer: false,      // No remover container
-            foreignObjectRendering: false, // Desactivar renderizado complejo
+            scale: 1.2,
+            useCORS: false,
+            allowTaint: true,
+            backgroundColor: '#ffffff',
+            logging: true,
+            height: contentHeight + 100, // Altura completa del contenido + margen
+            width: contentWidth,
+            scrollX: 0,
+            scrollY: 0,
             onclone: function(clonedDoc) {
-                console.log('📋 Documento clonado para PDF');
+                console.log('📋 Preparando documento continuo...');
                 
-                // Forzar visibilidad de todo el contenido
-                const allElements = clonedDoc.querySelectorAll('*');
-                allElements.forEach(el => {
-                    // Remover cualquier estilo que pueda ocultar contenido
-                    el.style.display = '';
-                    el.style.visibility = 'visible';
-                    el.style.opacity = '1';
-                });
-
-                // Ocultar solo elementos de navegación
-                const navElements = clonedDoc.querySelectorAll('.nav-menu, .scroll-indicator, .loading-overlay');
-                navElements.forEach(el => {
-                    el.style.display = 'none';
-                });
-
-                // Asegurar que el contenido principal sea visible
-                const mainContent = clonedDoc.getElementById('main-content');
-                if (mainContent) {
-                    mainContent.style.display = 'block';
-                    mainContent.style.visibility = 'visible';
-                    mainContent.style.opacity = '1';
-                    mainContent.style.position = 'static';
-                    mainContent.style.height = 'auto';
-                    mainContent.style.overflow = 'visible';
-                }
-
-                // Aplicar estilos básicos para PDF
+                // Aplicar estilos para PDF continuo
                 const style = clonedDoc.createElement('style');
                 style.innerHTML = `
+                    /* ESTILOS PARA PDF CONTINUO */
+                    
                     body { 
                         background: white !important; 
                         color: black !important;
                         font-family: Arial, sans-serif !important;
+                        margin: 0 !important;
+                        padding: 0 !important;
+                        overflow: visible !important;
                     }
-                    * { 
-                        box-sizing: border-box !important; 
-                    }
+                    
+                    /* Ocultar elementos de navegación */
                     .nav-menu, .scroll-indicator, .loading-overlay { 
                         display: none !important; 
                     }
+                    
+                    /* Contenedor principal sin restricciones */
                     #main-content {
                         display: block !important;
                         visibility: visible !important;
                         opacity: 1 !important;
                         position: static !important;
+                        width: 100% !important;
+                        height: auto !important;
+                        overflow: visible !important;
+                        page-break-inside: auto !important;
+                        break-inside: auto !important;
+                    }
+                    
+                    /* ELIMINAR TODOS LOS CORTES DE PÁGINA */
+                    *, *::before, *::after {
+                        page-break-inside: auto !important;
+                        break-inside: auto !important;
+                        page-break-before: auto !important;
+                        break-before: auto !important;
+                        page-break-after: auto !important;
+                        break-after: auto !important;
+                    }
+                    
+                    /* Asegurar flujo continuo */
+                    .overview-hero, .goals-section, .specifications-section,
+                    .use-cases-section, .milestones-section, .guarantee-section,
+                    .footer-cta {
+                        page-break-inside: auto !important;
+                        break-inside: auto !important;
+                        margin-bottom: 20px !important;
+                        display: block !important;
+                    }
+                    
+                    /* Cards sin restricciones */
+                    .overview-card, .goal-card, .spec-card, .use-case-card,
+                    .milestone-item, .guarantee-item, .cta-item {
+                        page-break-inside: auto !important;
+                        break-inside: auto !important;
+                        margin-bottom: 10px !important;
+                    }
+                    
+                    /* Headers sin cortes */
+                    h1, h2, h3, h4, h5, h6 {
+                        page-break-inside: auto !important;
+                        break-inside: auto !important;
+                        page-break-after: auto !important;
+                        break-after: auto !important;
+                    }
+                    
+                    /* Optimización para contenido continuo */
+                    .container {
+                        max-width: none !important;
+                        padding: 10px !important;
+                        margin: 0 !important;
+                    }
+                    
+                    /* Header más compacto */
+                    .corresur-header {
+                        margin-bottom: 15px !important;
+                    }
+                    
+                    .header-content {
+                        padding: 15px !important;
+                    }
+                    
+                    .main-title {
+                        font-size: 2rem !important;
+                        margin-bottom: 8px !important;
+                    }
+                    
+                    .project-subtitle {
+                        font-size: 0.9rem !important;
+                        margin-bottom: 10px !important;
+                    }
+                    
+                    .badge {
+                        font-size: 0.7rem !important;
+                        padding: 4px 8px !important;
+                        margin: 2px !important;
+                    }
+                    
+                    /* Secciones más compactas */
+                    .section {
+                        margin-bottom: 15px !important;
+                        padding: 15px !important;
+                    }
+                    
+                    /* Grids más compactos */
+                    .overview-grid, .goals-grid, .specs-grid, .use-case-grid {
+                        gap: 10px !important;
+                        margin-top: 15px !important;
+                    }
+                    
+                    /* Cards más compactas */
+                    .overview-card, .goal-card, .spec-card, .use-case-card {
+                        padding: 12px !important;
+                        margin: 5px 0 !important;
+                    }
+                    
+                    /* Timeline más compacto */
+                    .milestone-item {
+                        padding: 12px !important;
+                        margin-bottom: 10px !important;
+                    }
+                    
+                    /* Garantías más compactas */
+                    .guarantee-grid {
+                        grid-template-columns: repeat(6, 1fr) !important;
+                        gap: 8px !important;
+                    }
+                    
+                    .guarantee-item {
+                        padding: 8px !important;
+                    }
+                    
+                    .guarantee-item .number {
+                        font-size: 1.5rem !important;
+                        margin-bottom: 3px !important;
+                    }
+                    
+                    /* Footer CTA compacto */
+                    .footer-cta {
+                        padding: 15px !important;
+                    }
+                    
+                    .cta-grid {
+                        grid-template-columns: repeat(6, 1fr) !important;
+                        gap: 8px !important;
+                    }
+                    
+                    .cta-item {
+                        padding: 8px !important;
+                        font-size: 0.75rem !important;
+                    }
+                    
+                    /* Texto más compacto */
+                    p, li {
+                        font-size: 11px !important;
+                        line-height: 1.3 !important;
+                        margin: 3px 0 !important;
+                    }
+                    
+                    h2 {
+                        font-size: 1.3rem !important;
+                        margin: 10px 0 8px 0 !important;
+                    }
+                    
+                    h3 {
+                        font-size: 1.1rem !important;
+                        margin: 8px 0 5px 0 !important;
+                    }
+                    
+                    h4 {
+                        font-size: 1rem !important;
+                        margin: 5px 0 3px 0 !important;
+                    }
+                    
+                    /* Imagen del banner más pequeña */
+                    .responsive-banner {
+                        height: 120px !important;
+                        object-fit: cover !important;
+                    }
+                    
+                    /* Sin breaks en ningún lado */
+                    * {
+                        orphans: 1000 !important;
+                        widows: 1000 !important;
                     }
                 `;
                 clonedDoc.head.appendChild(style);
                 
-                console.log('✅ Estilos aplicados al documento clonado');
+                // Forzar visibilidad de todo
+                const allElements = clonedDoc.querySelectorAll('*');
+                allElements.forEach(el => {
+                    el.style.pageBreakInside = 'auto';
+                    el.style.breakInside = 'auto';
+                });
+
+                console.log('✅ Estilos continuos aplicados');
             }
         },
         jsPDF: { 
-            unit: 'mm', 
-            format: 'a4', 
-            orientation: 'portrait' 
+            unit: 'px',
+            format: [contentWidth + 50, contentHeight + 100], // Formato personalizado basado en contenido
+            orientation: 'portrait',
+            compress: true
         }
     };
 
-    console.log('⚙️ Configuración:', opt);
+    console.log('⚙️ Configuración PDF continuo:', opt);
 
-    // Asegurar que el elemento sea visible antes de la conversión
+    // Preparar elemento
     const originalStyles = {
         display: element.style.display,
         visibility: element.style.visibility,
         opacity: element.style.opacity,
-        position: element.style.position
+        position: element.style.position,
+        overflow: element.style.overflow
     };
 
     element.style.display = 'block';
     element.style.visibility = 'visible';
     element.style.opacity = '1';
     element.style.position = 'static';
+    element.style.overflow = 'visible';
 
-    // Ocultar temporalmente elementos problemáticos
+    // Ocultar elementos problemáticos
     const problemElements = document.querySelectorAll('.nav-menu, .scroll-indicator');
     problemElements.forEach(el => {
         el.style.display = 'none';
     });
 
-    console.log('🔄 Iniciando conversión a PDF...');
+    console.log('🔄 Iniciando conversión continua...');
 
-    // Generar PDF
+    // Generar PDF continuo
     html2pdf().set(opt).from(element).save()
         .then(() => {
-            console.log('✅ PDF generado exitosamente');
+            console.log('✅ PDF continuo generado exitosamente');
             
-            // Restaurar estilos originales
+            // Restaurar estilos
             Object.keys(originalStyles).forEach(prop => {
                 element.style[prop] = originalStyles[prop];
             });
             
-            // Restaurar elementos ocultos
             problemElements.forEach(el => {
                 el.style.display = '';
             });
             
-            // Remover indicador de carga
             if (document.body.contains(loadingOverlay)) {
                 document.body.removeChild(loadingOverlay);
             }
             
-            showNotification('✅ PDF descargado exitosamente', 'success');
-            trackEvent('PDF', 'download_success_robust', 'propuesta_ejecutiva');
+            showNotification('✅ PDF continuo descargado (sin cortes de página)', 'success');
+            trackEvent('PDF', 'download_continuous_success', 'propuesta_continua');
         })
         .catch((error) => {
-            console.error('❌ Error generando PDF:', error);
+            console.error('❌ Error generando PDF continuo:', error);
             
-            // Restaurar estilos originales
+            // Restaurar estilos
             Object.keys(originalStyles).forEach(prop => {
                 element.style[prop] = originalStyles[prop];
             });
             
-            // Restaurar elementos ocultos
             problemElements.forEach(el => {
                 el.style.display = '';
             });
             
-            // Remover indicador de carga
             if (document.body.contains(loadingOverlay)) {
                 document.body.removeChild(loadingOverlay);
             }
             
-            // Intentar método de emergencia
-            console.log('🚨 Intentando método de emergencia...');
-            downloadPDFEmergency();
+            // Intentar método alternativo
+            console.log('🚨 Intentando método de impresión directa...');
+            downloadPrintVersion();
         });
 }
 
-// Método de emergencia ultra-simple
-function downloadPDFEmergency() {
-    console.log('🆘 Método de emergencia activado');
+// Método alternativo: Preparar para impresión directa
+function downloadPrintVersion() {
+    console.log('🖨️ Preparando versión para impresión...');
     
-    const loadingOverlay = document.createElement('div');
-    loadingOverlay.className = 'loading-overlay';
-    loadingOverlay.innerHTML = `
-        <div class="loading-spinner"></div>
-        Método de emergencia...
-    `;
-    document.body.appendChild(loadingOverlay);
-
-    // Configuración minimalista
-    const element = document.getElementById('main-content');
+    const notification = showNotification('📄 Preparando para impresión. Use "Guardar como PDF" y seleccione "Más configuraciones" > "Diseño: Sin márgenes"', 'success');
     
-    // Solo si no funciona nada, usar window.print()
-    if (!element || typeof html2pdf === 'undefined') {
-        console.log('📄 Usando window.print() como último recurso');
-        
-        if (document.body.contains(loadingOverlay)) {
-            document.body.removeChild(loadingOverlay);
-        }
-        
-        // Preparar página para impresión
-        const style = document.createElement('style');
-        style.innerHTML = `
-            @media print {
-                body * { visibility: hidden; }
-                #main-content, #main-content * { visibility: visible; }
-                #main-content { position: absolute; left: 0; top: 0; width: 100%; }
-                .nav-menu, .scroll-indicator { display: none !important; }
+    // Crear estilos para impresión continua
+    const printStyle = document.createElement('style');
+    printStyle.id = 'continuous-print-style';
+    printStyle.innerHTML = `
+        @media print {
+            @page {
+                size: A4;
+                margin: 0;
             }
-        `;
-        document.head.appendChild(style);
-        
+            
+            body {
+                background: white !important;
+                color: black !important;
+                margin: 0 !important;
+                padding: 10px !important;
+                font-size: 10px !important;
+                line-height: 1.2 !important;
+            }
+            
+            /* Ocultar navegación */
+            .nav-menu, .scroll-indicator, .loading-overlay {
+                display: none !important;
+            }
+            
+            /* Mostrar solo contenido principal */
+            body * {
+                visibility: hidden !important;
+            }
+            
+            #main-content, #main-content * {
+                visibility: visible !important;
+            }
+            
+            #main-content {
+                position: absolute !important;
+                left: 0 !important;
+                top: 0 !important;
+                width: 100% !important;
+                height: auto !important;
+                overflow: visible !important;
+            }
+            
+            /* Eliminar todos los cortes */
+            * {
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+                page-break-before: auto !important;
+                break-before: auto !important;
+                page-break-after: auto !important;
+                break-after: auto !important;
+            }
+            
+            /* Contenido más compacto */
+            .corresur-header {
+                margin-bottom: 10px !important;
+            }
+            
+            .section {
+                margin-bottom: 8px !important;
+                padding: 8px !important;
+            }
+            
+            h1, h2, h3, h4, h5, h6 {
+                margin: 5px 0 3px 0 !important;
+                font-size: 12px !important;
+            }
+            
+            p, li {
+                margin: 2px 0 !important;
+                font-size: 9px !important;
+                line-height: 1.1 !important;
+            }
+            
+            .overview-grid, .goals-grid, .specs-grid, .use-case-grid {
+                display: block !important;
+            }
+            
+            .overview-card, .goal-card, .spec-card, .use-case-card {
+                display: block !important;
+                margin: 3px 0 !important;
+                padding: 5px !important;
+                border: 1px solid #ccc !important;
+            }
+            
+            .responsive-banner {
+                height: 50px !important;
+            }
+            
+            .badge {
+                font-size: 6px !important;
+                padding: 2px 4px !important;
+            }
+        }
+    `;
+    document.head.appendChild(printStyle);
+    
+    // Esperar un momento y abrir diálogo de impresión
+    setTimeout(() => {
         window.print();
         
+        // Limpiar después de 3 segundos
         setTimeout(() => {
-            document.head.removeChild(style);
-        }, 1000);
-        
-        showNotification('📄 Use "Guardar como PDF" en el diálogo de impresión', 'success');
-        return;
-    }
-
-    // Configuración súper básica
-    const basicOpt = {
-        margin: 15,
-        filename: 'CORRESUR_ERP+IA_Propuesta_Ejecutiva.pdf',
-        html2canvas: { 
-            scale: 0.8,
-            logging: false
-        },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-    };
-
-    html2pdf().set(basicOpt).from(element).save()
-        .then(() => {
-            console.log('✅ Método de emergencia exitoso');
-            if (document.body.contains(loadingOverlay)) {
-                document.body.removeChild(loadingOverlay);
+            const styleElement = document.getElementById('continuous-print-style');
+            if (styleElement) {
+                document.head.removeChild(styleElement);
             }
-            showNotification('✅ PDF generado con método de emergencia', 'success');
-        })
-        .catch((error) => {
-            console.error('❌ Método de emergencia falló:', error);
-            if (document.body.contains(loadingOverlay)) {
-                document.body.removeChild(loadingOverlay);
-            }
-            showNotification('❌ Error total. Use Ctrl+P y "Guardar como PDF"', 'error');
-        });
+        }, 3000);
+    }, 500);
 }
 
 // Función para mostrar notificaciones
@@ -272,7 +465,7 @@ function showNotification(message, type = 'success') {
         box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         transition: all 0.3s ease;
         transform: translateX(100%);
-        max-width: 350px;
+        max-width: 400px;
         font-size: 14px;
         line-height: 1.4;
     `;
@@ -290,7 +483,9 @@ function showNotification(message, type = 'success') {
                 document.body.removeChild(notification);
             }
         }, 300);
-    }, 5000);
+    }, 6000);
+    
+    return notification;
 }
 
 // ===== RESTO DEL CÓDIGO ORIGINAL =====
@@ -330,51 +525,42 @@ const observer = new IntersectionObserver((entries) => {
 
 // Inicialización
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('🏁 Página cargada, inicializando...');
+    console.log('🏁 Página cargada para PDF continuo...');
     
-    // Verificar elementos críticos
+    // Verificaciones
     const mainContent = document.getElementById('main-content');
     const pdfButton = document.querySelector('.pdf-button');
     
-    console.log('📋 Elemento main-content:', mainContent ? '✅ Encontrado' : '❌ No encontrado');
-    console.log('🔘 Botón PDF:', pdfButton ? '✅ Encontrado' : '❌ No encontrado');
+    console.log('📋 main-content:', mainContent ? '✅' : '❌');
+    console.log('🔘 botón PDF:', pdfButton ? '✅' : '❌');
     
     if (mainContent) {
-        console.log('📏 Dimensiones main-content:', {
+        console.log('📏 Contenido:', {
             width: mainContent.offsetWidth,
             height: mainContent.offsetHeight,
-            display: getComputedStyle(mainContent).display,
-            visibility: getComputedStyle(mainContent).visibility
+            scrollWidth: mainContent.scrollWidth,
+            scrollHeight: mainContent.scrollHeight
         });
     }
 
-    // Verificar si html2pdf está disponible
+    // Cargar html2pdf si es necesario
     if (typeof html2pdf === 'undefined') {
-        console.warn('⚠️ html2pdf no está disponible al cargar. Intentando cargar...');
+        console.warn('⚠️ Cargando html2pdf...');
         loadHTML2PDF().then(() => {
-            console.log('✅ html2pdf cargado exitosamente');
+            console.log('✅ html2pdf listo para PDF continuo');
         }).catch(err => {
-            console.error('❌ Error cargando html2pdf:', err);
+            console.error('❌ Error:', err);
         });
     } else {
-        console.log('✅ html2pdf ya disponible');
+        console.log('✅ html2pdf disponible para PDF continuo');
     }
 
-    // Observe sections for animations
+    // Observar secciones
     document.querySelectorAll('.section, .overview-hero, .goals-section, .specifications-section, .use-cases-section, .milestones-section, .guarantee-section').forEach((el) => {
         observer.observe(el);
     });
 
-    // Navigation tracking
-    document.querySelectorAll('.nav-menu a').forEach(link => {
-        link.addEventListener('click', (e) => {
-            const section = e.target.getAttribute('href')?.replace('#', '') || 'unknown';
-            console.log(`Navigation to section: ${section}`);
-            trackEvent('Navigation', 'click', section);
-        });
-    });
-
-    // Smooth scrolling
+    // Navegación suave
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
             e.preventDefault();
@@ -388,16 +574,16 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Loading animation
+    // Animación de carga
     document.body.style.opacity = '0';
     document.body.style.transition = 'opacity 0.5s ease-in-out';
     
     window.addEventListener('load', () => {
         document.body.style.opacity = '1';
-        console.log('🎯 Página completamente cargada');
+        console.log('🎯 Página lista para PDF continuo');
     });
 
-    // Parallax effect (solo en desktop)
+    // Efecto parallax (solo desktop)
     if (window.innerWidth > 768) {
         window.addEventListener('scroll', () => {
             const scrolled = window.pageYOffset;
@@ -408,7 +594,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Typewriter effect
+    // Efecto typewriter
     const mainTitle = document.querySelector('.main-title');
     if (mainTitle && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
         const text = mainTitle.textContent;
@@ -429,10 +615,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // Console branding
     console.log('%c🚀 CORRESUR ERP+IA', 'color: #0a3c52; font-size: 24px; font-weight: bold;');
     console.log('%c💡 Desarrollado por IN-ADVANCED', 'color: #ffa94d; font-size: 16px;');
-    console.log('%c🔧 Versión robusta con debugging', 'color: #4a9bb5; font-size: 12px;');
+    console.log('%c📄 PDF Continuo sin cortes de página', 'color: #4a9bb5; font-size: 12px;');
 });
 
-// Función para cargar html2pdf
+// Cargar html2pdf
 function loadHTML2PDF() {
     return new Promise((resolve, reject) => {
         if (typeof html2pdf !== 'undefined') {
@@ -443,18 +629,18 @@ function loadHTML2PDF() {
         const script = document.createElement('script');
         script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js';
         script.onload = () => {
-            console.log('📚 html2pdf cargado desde CDN');
+            console.log('📚 html2pdf cargado');
             resolve();
         };
         script.onerror = () => {
-            console.error('❌ Error cargando html2pdf desde CDN');
+            console.error('❌ Error cargando html2pdf');
             reject(new Error('No se pudo cargar html2pdf'));
-        };
+        });
         document.head.appendChild(script);
     });
 }
 
-// Keyboard navigation
+// Navegación por teclado
 document.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
         e.preventDefault();
@@ -478,7 +664,7 @@ document.addEventListener('keydown', (e) => {
         }
     }
     
-    // PDF shortcut
+    // Shortcut PDF
     if ((e.ctrlKey || e.metaKey) && e.key === 'p') {
         e.preventDefault();
         downloadPDF();
@@ -497,17 +683,10 @@ function trackEvent(category, action, label = '') {
     }
 }
 
-// Performance monitoring
+// Performance
 window.addEventListener('load', () => {
     const loadTime = performance.now();
-    console.log(`⚡ Página cargada en: ${Math.round(loadTime)}ms`);
-    trackEvent('Performance', 'page_load_time', `${Math.round(loadTime)}ms`);
+    console.log(`⚡ Cargado en: ${Math.round(loadTime)}ms`);
 });
 
-// Error handling
-window.addEventListener('error', (e) => {
-    console.error('💥 Error detectado:', e.error);
-    trackEvent('Error', 'javascript_error', e.message);
-});
-
-console.log('🎉 Script CORRESUR con debugging completo cargado');
+console.log('🎉 Script PDF Continuo cargado - Sin cortes de página');
