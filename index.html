@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ERP+IA CORRESUR - Propuesta Ejecutiva</title>
+    <meta name="description" content="Propuesta ejecutiva para transformación digital completa de CORRESUR con ERP modular e IA integrada">
+    <meta name="keywords" content="ERP, IA, CORRESUR, Bolivia, seguros, transformación digital">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="img/banner-corresur.png">
+    <link rel="apple-touch-icon" href="img/banner-corresur.png">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/styles.css">
+    
+    <!-- PDF Generation Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body>
+    <div class="scroll-indicator" id="scrollIndicator"></div>
+    
+    <nav class="nav-menu">
+        <a href="#overview">📋 Overview</a>
+        <a href="#goals">🎯 Objetivos</a>
+        <a href="#specs">🔧 Técnico</a>
+        <a href="#use-cases">📝 Casos de Uso</a>
+        <a href="#milestones">🎯 Milestones</a>
+        <a href="#guarantees">✅ Garantías</a>
+        <button class="pdf-button" onclick="downloadPDF()">📄 Descargar PDF</button>
+    </nav>
+    
+    <div class="container" id="main-content">
+        <header class="corresur-header">
+            <!-- Banner Principal Responsivo -->
+            <div class="banner-container">
+                <img src="img/banner-corresur.png" alt="CORRESUR & IN-ADVANCED - ERP+IA" class="responsive-banner">
+            </div>
+            
+            <!-- Contenido del Header -->
+            <div class="header-content">
+                <div class="main-title">ERP+IA Empresarial</div>
+                <div class="project-subtitle">Transformación Digital Completa • 12 Semanas • Resultados Garantizados</div>
+                
+                <div class="badges-container">
+                    <span class="badge">🚀 PROPUESTA EJECUTIVA</span>
+                    <span class="badge">⚡ DESARROLLO INMEDIATO</span>
+                </div>
+            </div>
+        </header>
+
+        <section id="overview" class="overview-hero">
+            <h2>📋 PROJECT OVERVIEW</h2>
+            <p><strong>Desarrollar un ERP modular completo con Agente de IA integrado</strong> que transforme digitalmente todos los procesos de CORRESUR, posicionándola como la corredora de seguros más tecnológicamente avanzada de Bolivia.</p>
+            
+            <div class="overview-grid">
+                <div class="overview-card">
+                    <h4>🎯 Propósito</h4>
+                    <p>Automatizar e integrar todos los procesos administrativos, financieros y comerciales con inteligencia artificial para maximizar eficiencia y competitividad.</p>
+                </div>
+                <div class="overview-card">
+                    <h4>🚀 Alcance</h4>
+                    <p>8 módulos principales + Agente IA multicanal + integraciones CRM + portal móvil + capacidades de voz + análisis predictivo.</p>
+                </div>
+                <div class="overview-card">
+                    <h4>⚡ Enfoque</h4>
+                    <p>Desarrollo ágil con 3 equipos paralelos, entregas semanales, metodología Scrum 3.0 y arquitectura cloud-native escalable.</p>
+                </div>
+                <div class="overview-card">
+                    <h4>📊 Resultado</h4>
+                    <p>CORRESUR operando con la plataforma digital más avanzada del sector, con 85% menos tareas manuales y 50% mejora en tiempos.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="goals" class="goals-section">
+            <h2>🎯 PROJECT GOALS</h2>
+            <p>Objetivos estratégicos que transformarán la operación de CORRESUR</p>
+            
+            <div class="goals-grid">
+                <div class="goal-card">
+                    <span class="goal-number">1</span>
+                    <h4>Eficiencia Operativa</h4>
+                    <p>Reducir 85% de tareas manuales mediante automatización inteligente y workflows optimizados</p>
+                </div>
+                <div class="goal-card">
+                    <span class="goal-number">2</span>
+                    <h4>Atención 24/7</h4>
+                    <p>Implementar Agente IA que atienda clientes externos e internos las 24 horas con expertise en seguros</p>
+                </div>
+                <div class="goal-card">
+                    <span class="goal-number">3</span>
+                    <h4>Integración Total</h4>
+                    <p>Conectar todos los sistemas y procesos en una plataforma única con vista consolidada de información</p>
+                </div>
+                <div class="goal-card">
+                    <span class="goal-number">4</span>
+                    <h4>Ventaja Competitiva</h4>
+                    <p>Posicionar a CORRESUR como la corredora más tecnológicamente avanzada de Bolivia</p>
+                </div>
+                <div class="goal-card">
+                    <span class="goal-number">5</span>
+                    <h4>ROI Demostrable</h4>
+                    <p>Generar retorno de inversión en 18 meses con beneficios medibles y sostenibles</p>
+                </div>
+                <div class="goal-card">
+                    <span class="goal-number">6</span>
+                    <h4>Escalabilidad</h4>
+                    <p>Crear plataforma que soporte el crecimiento futuro y nuevas líneas de negocio</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="specs" class="specifications-section">
+            <h2>🔧 TECHNICAL SPECIFICATIONS</h2>
+            <p>Especificaciones técnicas que garantizan un sistema robusto, escalable y futuro-proof</p>
+            
+            <div class="specs-grid">
+                <div class="spec-card">
+                    <h4>🏗️ Arquitectura Cloud-Native</h4>
+                    <ul>
+                        <li><strong>Infraestructura:</strong> AWS EKS + Kubernetes</li>
+                        <li><strong>Base de Datos:</strong> PostgreSQL Multi-AZ + MongoDB</li>
+                        <li><strong>Cache:</strong> Redis Cluster distribuido</li>
+                        <li><strong>Storage:</strong> S3 + CloudFront CDN</li>
+                        <li><strong>Monitoring:</strong> CloudWatch + alertas 24/7</li>
+                    </ul>
+                </div>
+                
+                <div class="spec-card">
+                    <h4>🤖 Agente IA Empresarial</h4>
+                    <ul>
+                        <li><strong>Engine:</strong> OpenAI GPT-4 + Custom Training</li>
+                        <li><strong>Voz:</strong> Whisper (STT) + ElevenLabs (TTS)</li>
+                        <li><strong>Knowledge Base:</strong> Pinecone Vector Database</li>
+                        <li><strong>Especialización:</strong> Ley de Seguros Bolivia</li>
+                        <li><strong>Canales:</strong> Web, Móvil, WhatsApp, Teams</li>
+                    </ul>
+                </div>
+                
+                <div class="spec-card">
+                    <h4>💻 Stack de Desarrollo</h4>
+                    <ul>
+                        <li><strong>Frontend:</strong> React 18 + TypeScript + PWA</li>
+                        <li><strong>Backend:</strong> Node.js + Express + GraphQL</li>
+                        <li><strong>Mobile:</strong> Progressive Web App nativa</li>
+                        <li><strong>CI/CD:</strong> GitLab + automated deployment</li>
+                        <li><strong>Security:</strong> OAuth 2.0 + encryption completa</li>
+                    </ul>
+                </div>
+                
+                <div class="spec-card">
+                    <h4>🔐 Seguridad Empresarial</h4>
+                    <ul>
+                        <li><strong>Authentication:</strong> Multi-factor + biometría</li>
+                        <li><strong>Authorization:</strong> RBAC granular por módulo</li>
+                        <li><strong>Encryption:</strong> AES-256 en reposo y tránsito</li>
+                        <li><strong>Compliance:</strong> Normativas APS Bolivia</li>
+                        <li><strong>Audit:</strong> Logs completos + trazabilidad</li>
+                    </ul>
+                </div>
+                
+                <div class="spec-card">
+                    <h4>📊 Business Intelligence</h4>
+                    <ul>
+                        <li><strong>Dashboards:</strong> Real-time + interactivos</li>
+                        <li><strong>Analytics:</strong> Predictivo + Machine Learning</li>
+                        <li><strong>Reportes:</strong> Automatizados + por voz</li>
+                        <li><strong>KPIs:</strong> Configurables + alertas</li>
+                        <li><strong>Export:</strong> Excel, PDF, API</li>
+                    </ul>
+                </div>
+                
+                <div class="spec-card">
+                    <h4>🔗 Integraciones</h4>
+                    <ul>
+                        <li><strong>CRM:</strong> Conectores agnósticos configurables</li>
+                        <li><strong>Banking:</strong> APIs bancos bolivianos</li>
+                        <li><strong>WhatsApp:</strong> Business API oficial</li>
+                        <li><strong>Email/SMS:</strong> Providers múltiples</li>
+                        <li><strong>Office 365:</strong> Teams, Outlook, SharePoint</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="use-cases" class="use-cases-section">
+            <h2>📝 SPECIFIC USE CASES</h2>
+            <p>Casos de uso específicos que demuestran el valor real del sistema para CORRESUR</p>
+            
+            <div class="use-case-grid">
+                <div class="use-case-card">
+                    <h5>💼 UC-001: Consulta de Póliza por IA</h5>
+                    <p><strong>Escenario:</strong> Cliente llama a las 11 PM preguntando sobre cobertura de su póliza de auto</p>
+                    <p><strong>Proceso Actual:</strong> Cliente debe esperar horario de oficina (8+ horas)</p>
+                    <p><strong>Con ERP+IA:</strong> Agente IA responde inmediatamente con detalles completos</p>
+                    <p><strong>Beneficio:</strong> Atención 24/7 + satisfacción del cliente</p>
+                </div>
+                
+                <div class="use-case-card">
+                    <h5>💰 UC-002: Conciliación Bancaria Automática</h5>
+                    <p><strong>Escenario:</strong> Contador necesita conciliar 500 transacciones mensuales</p>
+                    <p><strong>Proceso Actual:</strong> 2 días de trabajo manual con Excel</p>
+                    <p><strong>Con ERP+IA:</strong> Conciliación automática en 15 minutos</p>
+                    <p><strong>Beneficio:</strong> 95% ahorro de tiempo + eliminación de errores</p>
+                </div>
+                
+                <div class="use-case-card">
+                    <h5>📋 UC-003: Gestión de Reclamos Inteligente</h5>
+                    <p><strong>Escenario:</strong> Cliente reporta accidente de auto por WhatsApp</p>
+                    <p><strong>Proceso Actual:</strong> Llamada, formularios, seguimiento manual</p>
+                    <p><strong>Con ERP+IA:</strong> Registro automático, clasificación, asignación y seguimiento</p>
+                    <p><strong>Beneficio:</strong> 60% reducción en tiempo de resolución</p>
+                </div>
+                
+                <div class="use-case-card">
+                    <h5>🎯 UC-004: Ventas Cruzadas Predictivas</h5>
+                    <p><strong>Escenario:</strong> Cliente con seguro de auto cumple años</p>
+                    <p><strong>Proceso Actual:</strong> No hay seguimiento proactivo</p>
+                    <p><strong>Con ERP+IA:</strong> IA identifica oportunidad de seguro de vida automáticamente</p>
+                    <p><strong>Beneficio:</strong> 30% incremento en ventas cruzadas</p>
+                </div>
+                
+                <div class="use-case-card">
+                    <h5>📊 UC-005: Reportes Ejecutivos por Voz</h5>
+                    <p><strong>Escenario:</strong> Gerente necesita estado financiero mientras maneja</p>
+                    <p><strong>Proceso Actual:</strong> Debe esperar a llegar a oficina</p>
+                    <p><strong>Con ERP+IA:</strong> "IA, dame el reporte financiero del mes" - respuesta hablada</p>
+                    <p><strong>Beneficio:</strong> Información ejecutiva disponible anywhere, anytime</p>
+                </div>
+                
+                <div class="use-case-card">
+                    <h5>⚖️ UC-006: Consultas Legales Especializadas</h5>
+                    <p><strong>Escenario:</strong> Agente necesita interpretar cobertura según Ley de Seguros</p>
+                    <p><strong>Proceso Actual:</strong> Consulta manual en documentos legales</p>
+                    <p><strong>Con ERP+IA:</strong> IA entrenada en Ley de Seguros Bolivia responde inmediatamente</p>
+                    <p><strong>Beneficio:</strong> Asesoría legal especializada instantánea</p>
+                </div>
+                
+                <div class="use-case-card">
+                    <h5>📱 UC-007: Portal Móvil para Agentes</h5>
+                    <p><strong>Escenario:</strong> Agente en terreno necesita cotizar seguro</p>
+                    <p><strong>Proceso Actual:</strong> Debe regresar a oficina o llamar</p>
+                    <p><strong>Con ERP+IA:</strong> App móvil genera cotización instantánea</p>
+                    <p><strong>Beneficio:</strong> Ventas inmediatas + mejor experiencia cliente</p>
+                </div>
+                
+                <div class="use-case-card">
+                    <h5>🔄 UC-008: Integración CRM Transparente</h5>
+                    <p><strong>Escenario:</strong> Actualización de cliente en CRM debe reflejarse en ERP</p>
+                    <p><strong>Proceso Actual:</strong> Duplicación manual de datos</p>
+                    <p><strong>Con ERP+IA:</strong> Sincronización automática bidireccional</p>
+                    <p><strong>Beneficio:</strong> Data consistency + eliminación de duplicados</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="milestones" class="milestones-section">
+            <h2>🎯 PROJECT MILESTONES</h2>
+            <p>Hitos clave con entregas tangibles y medibles cada 2 semanas</p>
+            
+            <div class="milestone-timeline">
+                <div class="milestone-item">
+                    <div class="milestone-date">Semana 2</div>
+                    <h4>🏗️ Milestone 1: Infraestructura + Contabilidad Base</h4>
+                    <p><strong>Entregables:</strong></p>
+                    <ul>
+                        <li>AWS cluster operativo con monitoreo 24/7</li>
+                        <li>Plan contable personalizable funcionando</li>
+                        <li>Asientos contables con validaciones automáticas</li>
+                        <li>Prototipo IA conversacional respondiendo consultas básicas</li>
+                        <li>Dashboard responsive con login/logout</li>
+                    </ul>
+                    <p><strong>Demo:</strong> Registro de asientos + consulta al IA sobre saldos contables</p>
+                </div>
+
+                <div class="milestone-item">
+                    <div class="milestone-date">Semana 4</div>
+                    <h4>💰 Milestone 2: Contabilidad Avanzada + IA Especializada</h4>
+                    <p><strong>Entregables:</strong></p>
+                    <ul>
+                        <li>Sistema presupuestario por centros de costo completo</li>
+                        <li>Tesorería con conciliación bancaria automática</li>
+                        <li>Reportes contables (diario, mayor, balance) automatizados</li>
+                        <li>IA entrenada en normativas contables bolivianas</li>
+                        <li>Capacidades de voz básicas funcionando</li>
+                    </ul>
+                    <p><strong>Demo:</strong> Comando por voz "IA, muéstrame el balance general del mes"</p>
+                </div>
+
+                <div class="milestone-item">
+                    <div class="milestone-date">Semana 6</div>
+                    <h4>👥 Milestone 3: RRHH Integral</h4>
+                    <p><strong>Entregables:</strong></p>
+                    <ul>
+                        <li>Gestión completa de empleados y contratos</li>
+                        <li>Cálculo automático de planillas con beneficios sociales</li>
+                        <li>Reportes legales para entes de control</li>
+                        <li>Integración contable (asientos automáticos de planilla)</li>
+                        <li>Portal empleado con consultas de beneficios</li>
+                    </ul>
+                    <p><strong>Demo:</strong> Cálculo completo de planilla + generación de reportes AFP</p>
+                </div>
+
+                <div class="milestone-item">
+                    <div class="milestone-date">Semana 8</div>
+                    <h4>📊 Milestone 4: Business Intelligence + Workflows</h4>
+                    <p><strong>Entregables:</strong></p>
+                    <ul>
+                        <li>Dashboard ejecutivo con KPIs en tiempo real</li>
+                        <li>Workflows de aprobación configurables</li>
+                        <li>Reportería avanzada con analítica predictiva</li>
+                        <li>Sistema de alertas inteligentes</li>
+                        <li>Comandos de voz para reportes ejecutivos</li>
+                    </ul>
+                    <p><strong>Demo:</strong> "IA, analiza las tendencias financieras y dame recomendaciones"</p>
+                </div>
+
+                <div class="milestone-item">
+                    <div class="milestone-date">Semana 10</div>
+                    <h4>📋 Milestone 5: Gestión Documental + CITES</h4>
+                    <p><strong>Entregables:</strong></p>
+                    <ul>
+                        <li>Sistema CITES completo con trazabilidad</li>
+                        <li>Digitalización inteligente con OCR</li>
+                        <li>Búsqueda semántica avanzada</li>
+                        <li>Clasificación automática de documentos por IA</li>
+                        <li>Archivo digital completamente searchable</li>
+                    </ul>
+                    <p><strong>Demo:</strong> Búsqueda "IA, encuentra contratos de enero que mencionen seguros de vida"</p>
+                </div>
+
+                <div class="milestone-item">
+                    <div class="milestone-date">Semana 12</div>
+                    <h4>🚀 Milestone 6: Sistema Completo + Go-Live</h4>
+                    <p><strong>Entregables:</strong></p>
+                    <ul>
+                        <li>Integración completa con CRM existente</li>
+                        <li>Portal móvil PWA completamente funcional</li>
+                        <li>Agente IA multicanal (Web, móvil, WhatsApp, Teams)</li>
+                        <li>Capacidades de voz completas para reportes y consultas</li>
+                        <li>Sistema en producción con usuarios capacitados</li>
+                    </ul>
+                    <p><strong>Demo:</strong> Sistema completo operativo con todos los módulos integrados</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="guarantees" class="guarantee-section">
+            <h2>✅ GARANTÍAS Y COMPROMISOS</h2>
+            <p>Compromisos firmes que respaldan la viabilidad y éxito del proyecto</p>
+            
+            <div class="guarantee-grid">
+                <div class="guarantee-item">
+                    <span class="number">100%</span>
+                    <small>Funcionalidades según especificaciones</small>
+                </div>
+                <div class="guarantee-item">
+                    <span class="number">99.9%</span>
+                    <small>Uptime garantizado del sistema</small>
+                </div>
+                <div class="guarantee-item">
+                    <span class="number">95%</span>
+                    <small>Accuracy mínima del Agente IA</small>
+                </div>
+                <div class="guarantee-item">
+                    <span class="number">24/7</span>
+                    <small>Soporte técnico incluido</small>
+                </div>
+                <div class="guarantee-item">
+                    <span class="number">3</span>
+                    <small>Meses de soporte post go-live</small>
+                </div>
+                <div class="guarantee-item">
+                    <span class="number">85%</span>
+                    <small>Reducción mínima en tareas manuales</small>
+                </div>
+            </div>
+
+            <div style="margin-top: 30px; background: rgba(255,255,255,0.2); padding: 20px; border-radius: 10px;">
+                <h4>📋 Entregables Garantizados</h4>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-top: 15px;">
+                    <div>• Código fuente completo y documentado</div>
+                    <div>• Infraestructura AWS configurada y operativa</div>
+                    <div>• Base de conocimiento IA especializada</div>
+                    <div>• Documentación técnica y de usuario</div>
+                    <div>• Capacitación certificada por módulo</div>
+                    <div>• Plan de contingencia y rollback</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="footer-cta">
+            <h3>🚀 PROYECTO LISTO PARA EJECUCIÓN INMEDIATA</h3>
+            <p><strong>Todos los elementos están definidos para un desarrollo exitoso y predecible</strong></p>
+            
+            <div class="cta-grid">
+                <div class="cta-item">
+                    <strong>✅ Factible</strong><br>
+                    <small>Tecnologías probadas y equipo especializado</small>
+                </div>
+                <div class="cta-item">
+                    <strong>⏱️ Predecible</strong><br>
+                    <small>Cronograma realista con holguras incluidas</small>
+                </div>
+                <div class="cta-item">
+                    <strong>💰 Rentable</strong><br>
+                    <small>ROI demostrable en 18 meses</small>
+                </div>
+                <div class="cta-item">
+                    <strong>🔒 Seguro</strong><br>
+                    <small>Arquitectura empresarial con respaldos</small>
+                </div>
+                <div class="cta-item">
+                    <strong>📈 Escalable</strong><br>
+                    <small>Preparado para crecimiento futuro</small>
+                </div>
+                <div class="cta-item">
+                    <strong>🎯 Medible</strong><br>
+                    <small>KPIs claros y resultados verificables</small>
+                </div>
+            </div>
+
+            <div style="margin-top: 30px; padding: 20px; background: rgba(255,255,255,0.1); border-radius: 10px;">
+                <h4>📞 Próximos Pasos Inmediatos</h4>
+                <p>1. ✅ Aprobación de propuesta y firma de contrato<br>
+                2. 🚀 Kick-off meeting con equipos (48 horas)<br>
+                3. 🔧 Setup de infraestructura y herramientas (Semana 1)<br>
+                4. 💻 Inicio de desarrollo Sprint 1 (Semana 1)</p>
+            </div>
+        </section>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="js/script.js"></script>
+</body>
+</html>
