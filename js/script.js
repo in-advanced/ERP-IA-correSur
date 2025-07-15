@@ -1,20 +1,22 @@
-// ===== FUNCIONALIDAD DE DESCARGA PDF CORREGIDA =====
+// ===== FUNCIONALIDAD DE DESCARGA PDF MEJORADA =====
 function downloadPDF() {
     // Mostrar indicador de carga
     const loadingOverlay = document.createElement('div');
     loadingOverlay.className = 'loading-overlay';
     loadingOverlay.innerHTML = `
         <div class="loading-spinner"></div>
-        Generando PDF...
+        Generando PDF profesional...
     `;
     document.body.appendChild(loadingOverlay);
 
-    // Configuración corregida para html2pdf
+    // Preparar el contenido para PDF (aplicar estilos especiales)
+    prepareContentForPDF();
+
     const element = document.getElementById('main-content');
     
-    // Configuración mejorada para evitar errores de CORS
+    // Configuración optimizada para evitar cortes feos
     const opt = {
-        margin: [15, 15, 15, 15],
+        margin: [8, 8, 8, 8], // Márgenes más pequeños
         filename: 'CORRESUR_ERP+IA_Propuesta_Ejecutiva.pdf',
         image: { 
             type: 'jpeg', 
@@ -30,54 +32,213 @@ function downloadPDF() {
             letterRendering: true,
             removeContainer: true,
             imageTimeout: 15000,
+            height: null, // Permite altura automática
+            width: null,  // Permite ancho automático
             onclone: function(clonedDoc) {
-                // Manejar imágenes problemáticas en el documento clonado
-                const images = clonedDoc.querySelectorAll('img');
-                images.forEach(img => {
-                    // Agregar crossorigin attribute
-                    img.crossOrigin = 'anonymous';
-                    
-                    // Si la imagen causa problemas, la reemplazamos con un placeholder
-                    img.onerror = function() {
-                        console.log('Imagen problemática detectada, usando placeholder');
-                        this.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMGEzYzUyIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIyNCIgZmlsbD0iI2ZmZmZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkNPUlJFU1VSIEVSUCtJQTwvdGV4dD48L3N2Zz4=';
-                        this.style.objectFit = 'cover';
-                    };
-                });
-                
-                // Optimizar estilos para PDF
+                // Agregar estilos específicos para PDF
                 const style = clonedDoc.createElement('style');
                 style.innerHTML = `
-                    @media print {
-                        .nav-menu { display: none !important; }
-                        .scroll-indicator { display: none !important; }
-                        .loading-overlay { display: none !important; }
-                        body { background: white !important; }
-                        .section { page-break-inside: avoid; }
-                        .milestone-item { page-break-inside: avoid; }
-                        .use-case-card { page-break-inside: avoid; }
-                        .spec-card { page-break-inside: avoid; }
-                        .goal-card { page-break-inside: avoid; }
-                        .overview-card { page-break-inside: avoid; }
-                        h2 { page-break-after: avoid; }
-                        h3 { page-break-after: avoid; }
-                        h4 { page-break-after: avoid; }
+                    /* ESTILOS ESPECÍFICOS PARA PDF */
+                    
+                    /* Ocultar elementos de navegación */
+                    .nav-menu, .scroll-indicator, .loading-overlay { 
+                        display: none !important; 
+                    }
+                    
+                    /* Evitar cortes en secciones principales */
+                    .overview-hero, .goals-section, .specifications-section,
+                    .use-cases-section, .milestones-section, .guarantee-section,
+                    .footer-cta {
+                        page-break-inside: avoid !important;
+                        break-inside: avoid !important;
+                        margin-bottom: 30px !important;
+                    }
+                    
+                    /* Evitar cortes en cards individuales */
+                    .overview-card, .goal-card, .spec-card, .use-case-card,
+                    .milestone-item, .guarantee-item, .cta-item {
+                        page-break-inside: avoid !important;
+                        break-inside: avoid !important;
+                        margin-bottom: 15px !important;
+                    }
+                    
+                    /* Control de títulos */
+                    h1, h2, h3, h4, h5 {
+                        page-break-after: avoid !important;
+                        break-after: avoid !important;
+                        page-break-inside: avoid !important;
+                        break-inside: avoid !important;
+                    }
+                    
+                    /* Mantener grupos juntos */
+                    .goals-grid, .specs-grid, .use-case-grid, 
+                    .overview-grid, .guarantee-grid, .cta-grid {
+                        page-break-inside: avoid !important;
+                        break-inside: avoid !important;
+                    }
+                    
+                    /* Timeline de milestones */
+                    .milestone-timeline {
+                        page-break-inside: auto !important;
+                    }
+                    
+                    /* Forzar nueva página para secciones importantes */
+                    .use-cases-section {
+                        page-break-before: always !important;
+                        break-before: page !important;
+                    }
+                    
+                    .milestones-section {
+                        page-break-before: always !important;
+                        break-before: page !important;
+                    }
+                    
+                    /* Ajustar espaciado para PDF */
+                    body {
+                        background: white !important;
+                        font-size: 14px !important;
+                        line-height: 1.4 !important;
+                    }
+                    
+                    .container {
+                        max-width: none !important;
+                        padding: 0 !important;
+                        margin: 0 !important;
+                    }
+                    
+                    /* Reducir espacios excesivos */
+                    .corresur-header {
+                        margin-bottom: 20px !important;
+                    }
+                    
+                    .section {
+                        margin-bottom: 25px !important;
+                    }
+                    
+                    /* Mejorar legibilidad en PDF */
+                    p, li {
+                        font-size: 13px !important;
+                        line-height: 1.5 !important;
+                    }
+                    
+                    /* Headers más compactos */
+                    .header-content {
+                        padding: 20px !important;
+                    }
+                    
+                    .main-title {
+                        font-size: 2.2rem !important;
+                        margin-bottom: 10px !important;
+                    }
+                    
+                    .project-subtitle {
+                        font-size: 1rem !important;
+                        margin-bottom: 15px !important;
+                    }
+                    
+                    /* Badges más pequeños */
+                    .badge {
+                        font-size: 0.75rem !important;
+                        padding: 6px 12px !important;
+                        margin: 3px !important;
+                    }
+                    
+                    /* Grid más compacto */
+                    .overview-grid, .goals-grid, .specs-grid, .use-case-grid {
+                        gap: 15px !important;
+                        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)) !important;
+                    }
+                    
+                    /* Cards más compactas */
+                    .overview-card, .goal-card, .spec-card, .use-case-card {
+                        padding: 15px !important;
+                        margin: 8px 0 !important;
+                    }
+                    
+                    /* Timeline más compacto */
+                    .milestone-item {
+                        padding: 15px !important;
+                        margin-bottom: 15px !important;
+                    }
+                    
+                    /* Garantías en grid compacto */
+                    .guarantee-grid {
+                        grid-template-columns: repeat(3, 1fr) !important;
+                        gap: 10px !important;
+                    }
+                    
+                    .guarantee-item {
+                        padding: 12px !important;
+                    }
+                    
+                    .guarantee-item .number {
+                        font-size: 1.8rem !important;
+                        margin-bottom: 5px !important;
+                    }
+                    
+                    /* Footer CTA más compacto */
+                    .footer-cta {
+                        padding: 25px !important;
+                    }
+                    
+                    .cta-grid {
+                        grid-template-columns: repeat(3, 1fr) !important;
+                        gap: 12px !important;
+                    }
+                    
+                    .cta-item {
+                        padding: 12px !important;
+                        font-size: 0.85rem !important;
+                    }
+                    
+                    /* Optimizar imágenes */
+                    img {
+                        max-width: 100% !important;
+                        height: auto !important;
+                        page-break-inside: avoid !important;
+                        break-inside: avoid !important;
+                    }
+                    
+                    .responsive-banner {
+                        height: 150px !important;
+                        object-fit: cover !important;
+                    }
+                    
+                    /* Asegurar que el contenido fluya mejor */
+                    * {
+                        box-sizing: border-box !important;
                     }
                 `;
                 clonedDoc.head.appendChild(style);
+                
+                // Manejar imágenes problemáticas
+                const images = clonedDoc.querySelectorAll('img');
+                images.forEach(img => {
+                    img.crossOrigin = 'anonymous';
+                    img.onerror = function() {
+                        console.log('Imagen problemática detectada, usando placeholder');
+                        this.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjE1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMGEzYzUyIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIyMCIgZmlsbD0iI2ZmZmZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkNPUlJFU1VSIEVSUCtJQTwvdGV4dD48L3N2Zz4=';
+                        this.style.objectFit = 'cover';
+                        this.style.height = '150px';
+                    };
+                });
             }
         },
         jsPDF: { 
             unit: 'mm', 
             format: 'a4', 
             orientation: 'portrait',
-            compress: true
+            compress: true,
+            userUnit: 1.0
         },
         pagebreak: { 
             mode: ['avoid-all', 'css'],
-            before: ['#milestones', '#use-cases', '#specs'],
-            after: ['.footer-cta'],
-            avoid: ['.milestone-item', '.use-case-card', '.spec-card', '.goal-card']
+            avoid: [
+                '.overview-card', '.goal-card', '.spec-card', '.use-case-card',
+                '.milestone-item', '.guarantee-item', '.cta-item',
+                '.overview-hero', '.goals-section', '.specifications-section',
+                'h1', 'h2', 'h3', 'h4', 'h5'
+            ]
         }
     };
 
@@ -87,59 +248,96 @@ function downloadPDF() {
         el.style.display = 'none';
     });
 
-    // Generar PDF con manejo de errores mejorado
+    // Generar PDF
     html2pdf().set(opt).from(element).save()
         .then(() => {
-            // Restaurar elementos ocultos
+            // Restaurar elementos y estilos
+            restoreOriginalContent();
             problematicElements.forEach(el => {
                 el.style.display = '';
             });
             
-            // Remover indicador de carga
             if (document.body.contains(loadingOverlay)) {
                 document.body.removeChild(loadingOverlay);
             }
             
-            // Mostrar notificación de éxito
-            showNotification('✅ PDF descargado exitosamente', 'success');
-            
-            // Tracking del evento
-            trackEvent('PDF', 'download_success', 'propuesta_ejecutiva');
+            showNotification('✅ PDF profesional descargado exitosamente', 'success');
+            trackEvent('PDF', 'download_success_improved', 'propuesta_ejecutiva');
         })
         .catch((error) => {
-            // Restaurar elementos ocultos
+            restoreOriginalContent();
             problematicElements.forEach(el => {
                 el.style.display = '';
             });
             
-            // Remover indicador de carga
             if (document.body.contains(loadingOverlay)) {
                 document.body.removeChild(loadingOverlay);
             }
             
             console.error('Error generating PDF:', error);
-            
-            // Intentar método alternativo con configuración más simple
             downloadPDFAlternative();
         });
 }
 
-// Método alternativo más simple para generar PDF
+// Función para preparar el contenido antes de generar PDF
+function prepareContentForPDF() {
+    const style = document.createElement('style');
+    style.id = 'pdf-preparation-styles';
+    style.innerHTML = `
+        /* Estilos temporales para mejorar el PDF */
+        @media print {
+            .nav-menu, .scroll-indicator, .loading-overlay { 
+                display: none !important; 
+            }
+            
+            body {
+                background: white !important;
+            }
+            
+            .section, .overview-hero, .goals-section, .specifications-section,
+            .use-cases-section, .milestones-section, .guarantee-section {
+                page-break-inside: avoid;
+                break-inside: avoid;
+            }
+            
+            .overview-card, .goal-card, .spec-card, .use-case-card,
+            .milestone-item, .guarantee-item, .cta-item {
+                page-break-inside: avoid;
+                break-inside: avoid;
+            }
+            
+            h1, h2, h3, h4, h5 {
+                page-break-after: avoid;
+                break-after: avoid;
+            }
+        }
+    `;
+    document.head.appendChild(style);
+}
+
+// Función para restaurar el contenido original
+function restoreOriginalContent() {
+    const tempStyle = document.getElementById('pdf-preparation-styles');
+    if (tempStyle) {
+        tempStyle.remove();
+    }
+}
+
+// Método alternativo más simple
 function downloadPDFAlternative() {
-    console.log('Intentando método alternativo de generación PDF...');
+    console.log('Intentando método alternativo...');
     
     const loadingOverlay = document.createElement('div');
     loadingOverlay.className = 'loading-overlay';
     loadingOverlay.innerHTML = `
         <div class="loading-spinner"></div>
-        Generando PDF (método alternativo)...
+        Generando PDF (método simple)...
     `;
     document.body.appendChild(loadingOverlay);
 
-    // Configuración más simple y compatible
     const element = document.getElementById('main-content');
     const opt = {
-        margin: 10,
+        margin: 15,
         filename: 'CORRESUR_ERP+IA_Propuesta_Ejecutiva.pdf',
         image: { type: 'jpeg', quality: 0.8 },
         html2canvas: { 
@@ -149,11 +347,9 @@ function downloadPDFAlternative() {
             backgroundColor: '#ffffff',
             logging: false,
             ignoreElements: function(element) {
-                // Ignorar elementos problemáticos
                 return element.classList.contains('nav-menu') || 
                        element.classList.contains('scroll-indicator') ||
-                       element.classList.contains('loading-overlay') ||
-                       element.tagName === 'IMG';
+                       element.classList.contains('loading-overlay');
             }
         },
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
@@ -164,7 +360,7 @@ function downloadPDFAlternative() {
             if (document.body.contains(loadingOverlay)) {
                 document.body.removeChild(loadingOverlay);
             }
-            showNotification('✅ PDF descargado exitosamente (sin imágenes)', 'success');
+            showNotification('✅ PDF descargado (versión simple)', 'success');
             trackEvent('PDF', 'download_alternative_success', 'propuesta_ejecutiva');
         })
         .catch((error) => {
@@ -172,7 +368,7 @@ function downloadPDFAlternative() {
                 document.body.removeChild(loadingOverlay);
             }
             console.error('Error en método alternativo:', error);
-            showNotification('❌ Error al generar PDF. Intente usar el navegador en modo incógnito.', 'error');
+            showNotification('❌ Error al generar PDF. Pruebe en navegador Chrome o Firefox.', 'error');
             trackEvent('PDF', 'download_error', 'propuesta_ejecutiva');
         });
 }
@@ -193,17 +389,16 @@ function showNotification(message, type = 'success') {
         box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         transition: all 0.3s ease;
         transform: translateX(100%);
-        max-width: 300px;
+        max-width: 320px;
+        font-size: 14px;
     `;
     notification.textContent = message;
     document.body.appendChild(notification);
     
-    // Animar entrada
     setTimeout(() => {
         notification.style.transform = 'translateX(0)';
     }, 100);
     
-    // Remover después de 4 segundos
     setTimeout(() => {
         notification.style.transform = 'translateX(100%)';
         setTimeout(() => {
@@ -214,9 +409,9 @@ function showNotification(message, type = 'success') {
     }, 4000);
 }
 
-// ===== FUNCIONALIDAD ORIGINAL MEJORADA =====
+// ===== RESTO DEL CÓDIGO ORIGINAL =====
 
-// Smooth scroll indicator con optimización de rendimiento
+// Smooth scroll indicator optimizado
 let scrollTicking = false;
 function updateScrollIndicator() {
     const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
@@ -249,7 +444,7 @@ const observer = new IntersectionObserver((entries) => {
     rootMargin: '50px'
 });
 
-// Inicialización mejorada cuando DOM esté listo
+// Inicialización cuando DOM esté listo
 document.addEventListener('DOMContentLoaded', () => {
     // Verificar si html2pdf está disponible
     if (typeof html2pdf === 'undefined') {
@@ -257,12 +452,12 @@ document.addEventListener('DOMContentLoaded', () => {
         loadHTML2PDF();
     }
 
-    // Observe all sections for animations
+    // Observe sections for animations
     document.querySelectorAll('.section, .overview-hero, .goals-section, .specifications-section, .use-cases-section, .milestones-section, .guarantee-section').forEach((el) => {
         observer.observe(el);
     });
 
-    // Add click tracking for analytics
+    // Navigation tracking
     document.querySelectorAll('.nav-menu a').forEach(link => {
         link.addEventListener('click', (e) => {
             const section = e.target.getAttribute('href')?.replace('#', '') || 'unknown';
@@ -271,7 +466,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Smooth scrolling for navigation links
+    // Smooth scrolling
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
             e.preventDefault();
@@ -285,7 +480,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Add loading animation
+    // Loading animation
     document.body.style.opacity = '0';
     document.body.style.transition = 'opacity 0.5s ease-in-out';
     
@@ -293,7 +488,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.style.opacity = '1';
     });
 
-    // Add parallax effect to header (solo en desktop)
+    // Parallax effect (only on desktop)
     if (window.innerWidth > 768) {
         window.addEventListener('scroll', () => {
             const scrolled = window.pageYOffset;
@@ -304,7 +499,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Add typewriter effect to main title
+    // Typewriter effect
     const mainTitle = document.querySelector('.main-title');
     if (mainTitle && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
         const text = mainTitle.textContent;
@@ -322,10 +517,10 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(typeWriter, 1000);
     }
 
-    // Console branding con colores actualizados de CORRESUR
+    // Console branding
     console.log('%c🚀 CORRESUR ERP+IA', 'color: #0a3c52; font-size: 24px; font-weight: bold;');
     console.log('%c💡 Desarrollado por IN-ADVANCED', 'color: #ffa94d; font-size: 16px;');
-    console.log('%c🔧 Tecnologías: HTML5, CSS3, JavaScript ES6+', 'color: #4a9bb5; font-size: 12px;');
+    console.log('%c🔧 PDF con control de page breaks mejorado', 'color: #4a9bb5; font-size: 12px;');
 });
 
 // Función para cargar html2pdf si no está disponible
@@ -350,9 +545,8 @@ function loadHTML2PDF() {
     });
 }
 
-// Add keyboard navigation
+// Keyboard navigation
 document.addEventListener('keydown', (e) => {
-    // Navigate sections with arrow keys
     if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
         e.preventDefault();
         const sections = document.querySelectorAll('section[id]');
@@ -375,14 +569,14 @@ document.addEventListener('keydown', (e) => {
         }
     }
     
-    // Shortcut para descargar PDF (Ctrl+P o Cmd+P)
+    // PDF shortcut
     if ((e.ctrlKey || e.metaKey) && e.key === 'p') {
         e.preventDefault();
         downloadPDF();
     }
 });
 
-// Add dynamic title updates based on visible section
+// Dynamic title updates
 const updatePageTitle = () => {
     const sections = document.querySelectorAll('section[id]');
     const currentSection = Array.from(sections).find(section => {
@@ -400,11 +594,10 @@ const updatePageTitle = () => {
 
 window.addEventListener('scroll', updatePageTitle);
 
-// ===== ANALYTICS Y TRACKING =====
+// Analytics y tracking
 function trackEvent(category, action, label = '') {
     console.log(`Event: ${category} - ${action} - ${label}`);
     
-    // Google Analytics 4
     if (typeof gtag !== 'undefined') {
         gtag('event', action, {
             event_category: category,
@@ -412,29 +605,27 @@ function trackEvent(category, action, label = '') {
         });
     }
     
-    // Google Analytics Universal
     if (typeof ga !== 'undefined') {
         ga('send', 'event', category, action, label);
     }
 }
 
-// ===== PERFORMANCE MONITORING =====
+// Performance monitoring
 window.addEventListener('load', () => {
     const loadTime = performance.now();
     console.log(`⚡ Página cargada en: ${Math.round(loadTime)}ms`);
     trackEvent('Performance', 'page_load_time', `${Math.round(loadTime)}ms`);
 });
 
-// Error handling mejorado
+// Error handling
 window.addEventListener('error', (e) => {
     console.error('Error detectado:', e.error);
     trackEvent('Error', 'javascript_error', e.message);
 });
 
-// Manejo de promesas rechazadas
 window.addEventListener('unhandledrejection', (e) => {
-    console.error('Promise rejizada:', e.reason);
+    console.error('Promise rechazada:', e.reason);
     trackEvent('Error', 'unhandled_promise_rejection', e.reason.toString());
 });
 
-console.log('🎉 CORRESUR ERP+IA Script cargado completamente con funcionalidad PDF corregida');
+console.log('🎉 CORRESUR ERP+IA Script con control profesional de page breaks cargado');
