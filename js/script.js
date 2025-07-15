@@ -635,7 +635,7 @@ function loadHTML2PDF() {
         script.onerror = () => {
             console.error('❌ Error cargando html2pdf');
             reject(new Error('No se pudo cargar html2pdf'));
-        });
+        };
         document.head.appendChild(script);
     });
 }
